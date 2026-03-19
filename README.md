@@ -4,19 +4,43 @@ An interactive, single-file web quiz that helps users find the right Mac for the
 
 ## Usage
 
-Open `pick-a-mac.html` directly in any browser — no server, build step, or internet connection required.
+Everything is self contained. Open `pick-a-mac.html` directly in any browser or host on any web server.
+
+<img width="462" height="483" alt="image" src="https://github.com/user-attachments/assets/b1050564-8090-4588-9707-dc40c13cda28" />
 
 ## How it works
 
 The quiz asks single-choice questions covering topics like primary role, app usage, multitasking load, media editing, AI tool usage, external displays, portability, and budget. Each answer carries **signals** — weighted dimensions that contribute to per-device scores. When all questions are answered the device with the highest accumulated score is recommended, alongside:
 
-- Key specifications
-- Recommended use cases
-- Pros and cons
-- A capability matrix across common tasks
-- A score graph showing how all devices ranked
-- Upgrade/configuration options (chip, RAM, storage)
-- A runner-up suggestion
+- **Key specifications**
+
+  <img width="473" height="238" alt="image" src="https://github.com/user-attachments/assets/d83ea8e0-9fc4-4d1f-8d8d-57501589a49c" />
+
+- **Recommended use cases**
+
+  <img width="452" height="117" alt="image" src="https://github.com/user-attachments/assets/51e72ec2-e8ed-45c6-b699-69eab2d58cdf" />
+
+- **Pros and cons**
+
+  <img width="467" height="207" alt="image" src="https://github.com/user-attachments/assets/265c23ee-67ea-44a1-bfd6-190c35f957fd" />
+
+- **A capability matrix across common tasks**
+
+  <img width="525" height="574" alt="image" src="https://github.com/user-attachments/assets/766597fb-eadb-491c-bedb-e483c1d8bcea" />
+
+- **A score graph showing how all devices ranked**
+
+  <img width="491" height="213" alt="image" src="https://github.com/user-attachments/assets/6d499a03-df86-4be6-a843-a205de92aa16" />
+
+- **Upgrade/configuration options (chip, RAM, storage)**
+
+  <img width="524" height="284" alt="image" src="https://github.com/user-attachments/assets/a93d6fff-4816-41b5-b836-24e7fde372e5" />
+
+- **A runner-up suggestion**
+
+  <img width="469" height="97" alt="image" src="https://github.com/user-attachments/assets/413819eb-69c1-437e-99fe-e9eb739d7e3f" />
+
+
 
 ## Configuration
 
