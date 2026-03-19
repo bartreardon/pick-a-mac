@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What Mac is right for you?</title>
+<script>
+// ─── CONFIGURATION ────────────────────────────────
+// Edit values here to update general properties.
+const CONFIG = {
+
+  // ── Debug ─────────────────────────────────────
+  // Set to true to show live scoring panel during the quiz
+  debug: false,
+
+  // ── UI ────────────────────────────────────────
+  title:          'What Mac is right for you?',
+  subtitle:       'Answer a few quick questions and we\'ll recommend the best device for your needs.',
+  logoUrl:        'https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Apple_logo_white.svg/1280px-Apple_logo_white.svg.png',
+  logoAlt:        'Apple',
+  // CSS gradient for the header banner — supports any valid CSS gradient or solid colour
+  bannerGradient: 'linear-gradient(135deg, #e8b830 0%, #4a0e7a 50%, #0a0018 100%)',
+
+  // ── Pricing ───────────────────────────────────
+  // Text appended to every price in parentheses — set to '' to omit
+  appleCareSuffix: '',
+
+};
+// ──────────────────────────────────────────────────
+</script>
+<style>
+  :root {
+    --bg: #fafaf9;
+    --surface: #ffffff;
+    --surface-alt: #f5f5f4;
+    --text: #1c1917;
+    --text-secondary: #78716c;
+    --text-tertiary: #a8a29e;
+    --border: #e7e5e4;
+    --accent: #0071e3;
+    --accent-light: #e8f4fd;
+    --green: #34c759;
+    --green-bg: #ecfdf3;
+    --green-text: #166534;
+    --amber: #ff9f0a;
+    --amber-bg: #fffbeb;
+    --amber-text: #92400e;
+    --red: #ff3b30;
+    --red-bg: #fef2f2;
+    --red-text: #991b1b;
+    --radius: 16px;
+    --radius-sm: 10px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03);
+    --shadow-lg: 0 4px 24px rgba(0,0,0,0.06), 0 12px 48px rgba(0,0,0,0.04);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 40px 24px 60px;
+    transition: max-width 0.3s ease;
+  }
+  .page.wide { max-width: 1080px; }
+
+  /* Header */
+  .site-header {
+    width: 100%;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  }
+  .site-header-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+  .site-logo {
+    height: 44px;
+    width: auto;
+    flex-shrink: 0;
+  }
+  .site-header-divider {
+    width: 1px;
+    height: 36px;
+    background: rgba(255,255,255,0.3);
+    flex-shrink: 0;
+  }
+  .site-header-text h1 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin-bottom: 2px;
+  }
+  .site-header-text p {
+    font-size: 13px;
+    color: rgba(255,255,255,0.75);
+    margin: 0;
+  }
+  @media (max-width: 600px) {
+    .site-header-inner { padding: 16px 20px; gap: 16px; }
+    .site-logo { height: 34px; }
+    .site-header-text h1 { font-size: 16px; }
+    .site-header-text p { display: none; }
+  }
+
+  /* Progress */
+  .progress-bar {
+    height: 4px;
+    background: var(--surface-alt);
+    border-radius: 100px;
+    margin-bottom: 40px;
+    overflow: hidden;
+    transition: opacity 0.3s;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 100px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 0%;
+  }
+  .progress-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-tertiary);
+    margin-bottom: 8px;
+    text-align: right;
+    transition: opacity 0.3s;
+  }
+
+  /* Question card */
+  .question-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    box-shadow: var(--shadow);
+  }
+  .question-number {
+    font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent);
+    margin-bottom: 8px;
+    letter-spacing: 0.05em;
+  }
+  .question-text {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+  .question-hint {
+    font-size: 13px;
+    color: var(--text-tertiary);
+    margin-bottom: 24px;
+  }
+
+  /* Options */
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .option {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+    position: relative;
+  }
+  .option:hover {
+    border-color: var(--accent);
+    background: var(--accent-light);
+  }
+  .option.selected {
+    border-color: var(--accent);
+    background: var(--accent-light);
+  }
+  .option-radio {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .option.selected .option-radio {
+    border-color: var(--accent);
+    background: var(--accent);
+  }
+  .option.selected .option-radio::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+  }
+  .option-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .option-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 400;
+  }
+
+  /* Navigation */
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 28px;
+  }
+  .btn {
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 12px 28px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+  }
+  .btn-primary:hover { background: #005bb5; transform: translateY(-1px); }
+  .btn-primary:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text-secondary);
+    padding: 12px 16px;
+  }
+  .btn-secondary:hover { color: var(--text); }
+  .btn-restart {
+    background: var(--surface-alt);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    margin-top: 24px;
+  }
+  .btn-restart:hover { background: var(--border); color: var(--text); }
+
+  /* Result */
+  .result-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+  }
+  .result-hero {
+    padding: 40px 32px 32px;
+    text-align: center;
+    position: relative;
+  }
+  .result-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.06;
+    border-radius: var(--radius) var(--radius) 0 0;
+    pointer-events: none;
+  }
+
+  .result-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    font-size: 28px;
+  }
+
+  .result-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+  }
+
+  .result-device {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: 4px;
+  }
+  .result-tagline {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 0;
+  }
+
+  .result-body { padding: 0 32px 32px; }
+
+  .result-columns {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  @media (min-width: 860px) {
+    .result-columns {
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+    .result-col-left {
+      border-right: 1px solid var(--border);
+      padding-right: 32px;
+    }
+  }
+  .result-col-left, .result-col-right {
+    min-width: 0;
+  }
+
+  .result-section-title {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-tertiary);
+    margin: 24px 0 12px;
+  }
+
+  .spec-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .spec-item {
+    background: var(--surface-alt);
+    border-radius: 8px;
+    padding: 10px 14px;
+  }
+  .spec-label { font-size: 11px; color: var(--text-tertiary); font-weight: 500; }
+  .spec-value { font-size: 14px; font-weight: 600; margin-top: 2px; }
+
+  .pro-con-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 4px;
+  }
+  .pro-con-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .pro-con-list li {
+    font-size: 13px;
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    line-height: 1.4;
+  }
+  .pro-con-list li .icon {
+    flex-shrink: 0;
+    font-size: 13px;
+    margin-top: 1px;
+  }
+  .pro-con-list li .icon.pro { color: var(--green); }
+  .pro-con-list li .icon.con { color: var(--red); }
+  .pro-con-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+  .pro-con-label.pros { color: var(--green-text); }
+  .pro-con-label.cons { color: var(--red-text); }
+
+  .use-cases {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 4px;
+  }
+  .use-tag {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 100px;
+    background: var(--surface-alt);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+  }
+
+  .note-box {
+    background: var(--amber-bg);
+    border: 1px solid #fde68a;
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    margin-top: 20px;
+    font-size: 13px;
+    color: var(--amber-text);
+    line-height: 1.5;
+  }
+  .note-box strong { font-weight: 600; }
+
+  .matrix-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--surface-alt);
+    font-size: 13px;
+  }
+  .matrix-row:last-child { border-bottom: none; }
+  .matrix-task { color: var(--text); }
+  .matrix-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 100px;
+  }
+  .matrix-badge.yes { background: var(--green-bg); color: var(--green-text); }
+  .matrix-badge.limited { background: var(--amber-bg); color: var(--amber-text); }
+  .matrix-badge.no { background: var(--red-bg); color: var(--red-text); }
+
+  /* Debug panel */
+  .debug-bar {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    background: #1c1917;
+    color: #e7e5e4;
+    font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+    font-size: 11px;
+    padding: 10px 16px;
+    margin: 0 -24px 20px;
+    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+    border-bottom: 2px solid #f97316;
+  }
+  .debug-bar .debug-title {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #f97316;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .debug-scores {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 8px;
+  }
+  .debug-device {
+    background: rgba(255,255,255,0.06);
+    border-radius: 6px;
+    padding: 6px 10px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: border-color 0.2s;
+  }
+  .debug-device.leading {
+    border-color: #f97316;
+    background: rgba(249,115,22,0.1);
+  }
+  .debug-device-name {
+    font-weight: 600;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 2px;
+  }
+  .debug-device-score {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fafaf9;
+    line-height: 1;
+  }
+  .debug-answers {
+    margin-top: 8px;
+    font-size: 10px;
+    color: #a8a29e;
+    line-height: 1.6;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding-top: 6px;
+  }
+  .debug-answers span { color: #e7e5e4; }
+
+  /* Debug final scores table on result page */
+  .debug-final {
+    background: #1c1917;
+    color: #e7e5e4;
+    font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+    font-size: 11px;
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    margin-top: 20px;
+    border: 2px solid #f97316;
+  }
+  .debug-final .debug-title {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #f97316;
+    margin-bottom: 10px;
+  }
+  .debug-final-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 0;
+  }
+  .debug-final-label {
+    width: 70px;
+    font-weight: 600;
+    font-size: 11px;
+  }
+  .debug-final-bar-bg {
+    flex: 1;
+    height: 16px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+  .debug-final-bar {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.4s ease;
+    min-width: 2px;
+  }
+  .debug-final-val {
+    width: 30px;
+    text-align: right;
+    font-weight: 700;
+    font-size: 13px;
+  }
+  .debug-final-winner {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 10px;
+    color: #a8a29e;
+  }
+  .debug-final-winner strong { color: #f97316; }
+
+  /* Score match graph (shown to all users) */
+  .score-graph {
+    margin-top: 20px;
+    background: var(--surface-alt);
+    border-radius: var(--radius-sm);
+    padding: 16px 18px;
+  }
+  .score-graph-title {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-tertiary);
+    margin-bottom: 14px;
+  }
+  .score-graph-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 0;
+  }
+  .score-graph-label {
+    width: 80px;
+    font-size: 13px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .score-graph-bar-track {
+    flex: 1;
+    height: 22px;
+    background: var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+  }
+  .score-graph-bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 2px;
+  }
+  .score-graph-pct {
+    width: 38px;
+    text-align: right;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    flex-shrink: 0;
+  }
+  .score-graph-hint {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    margin-top: 10px;
+    line-height: 1.4;
+  }
+
+  /* Upgrade / configuration options section */
+  .upgrade-section {
+    border-top: 1px solid var(--border);
+    padding-top: 8px;
+    margin-top: 8px;
+  }
+  .upgrade-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+  }
+  .upgrade-category-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-tertiary);
+    margin-bottom: 8px;
+  }
+  .upgrade-options {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .upgrade-option {
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: var(--surface-alt);
+    border: 1.5px solid var(--border);
+  }
+  .upgrade-option.base {
+    border-left: 3px solid var(--text-tertiary);
+  }
+  .upgrade-option-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .upgrade-option-note {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 3px;
+    line-height: 1.4;
+  }
+  .upgrade-overlap-note {
+    margin-top: 12px;
+    padding: 12px 14px;
+    background: var(--accent-light);
+    border: 1px solid #bfdbfe;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    color: #1e40af;
+    line-height: 1.5;
+  }
+
+  .hidden { display: none; }
+
+  @media (max-width: 600px) {
+    .page { padding: 24px 16px 40px; }
+    .question-card { padding: 24px; }
+    .result-hero { padding: 32px 24px 24px; }
+    .result-body { padding: 0 20px 24px; }
+    .spec-grid { grid-template-columns: 1fr; }
+    .pro-con-grid { grid-template-columns: 1fr; }
+    .score-graph-row { gap: 6px; }
+    .score-graph-label { width: 60px; font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="site-header-inner">
+    <img class="site-logo" src="https://www.csiro.au/-/media/Web-team/Images/CSIRO_Logo/logo.png" alt="CSIRO">
+    <div class="site-header-divider"></div>
+    <div class="site-header-text">
+      <h1>What Mac is right for you?</h1>
+      <p>Answer a few quick questions and we'll recommend the best device for your needs.</p>
+    </div>
+  </div>
+</header>
+<div class="page">
+  <div id="debug-panel" class="debug-bar hidden"></div>
+
+  <div id="quiz-section">
+    <div class="progress-label" id="progress-label">Question 1 of 9</div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    <div id="question-container"></div>
+  </div>
+
+  <div id="result-section" class="hidden"></div>
+</div>
+
+<script>
+const questions = [
+  {
+    id: 'role',
+    text: 'Which best describes your primary role?',
+    hint: 'Pick the closest match to your day-to-day work',
+    options: [
+      { label: 'Administrative / Support', desc: 'Email, documents, scheduling, coordination', value: 'admin', signals: { everyday: 3, budgetConscious: 1 } },
+      { label: 'Research / Analysis', desc: 'Data analysis, large datasets, scientific computing', value: 'research', signals: { data: 2, power: 1 } },
+      { label: 'Software Development', desc: 'Writing code, building apps, DevOps', value: 'dev', signals: { development: 3, power: 1 } },
+      { label: 'Creative / Communications', desc: 'Design, video, photography, content creation', value: 'creative', signals: { creative: 3, power: 1 } }
+    ]
+  },
+  {
+    id: 'apps',
+    text: 'Which applications do you use most heavily?',
+    hint: 'Think about what you spend the bulk of your time in',
+    options: [
+      { label: 'Office suite & web apps', desc: 'Outlook, Word, Excel, Teams, browser-based tools', value: 'office', signals: { everyday: 3 } },
+      { label: 'Creative apps', desc: 'Photoshop, Illustrator, Figma, Final Cut, Premiere', value: 'creative', signals: { creative: 3, power: 1 } },
+      { label: 'Development tools', desc: 'VS Code, Xcode, Docker, terminal, Git', value: 'dev', signals: { development: 2, power: 1 } },
+      { label: 'Data & analysis tools', desc: 'Excel (large datasets), R, Python, Jupyter, MATLAB', value: 'data', signals: { data: 3, power: 1 } }
+    ]
+  },
+  {
+    id: 'multitask',
+    text: 'How many applications do you typically have open at once?',
+    hint: 'Think about a busy workday',
+    options: [
+      { label: 'Light - a few apps and tabs', desc: 'Browser, email, maybe a document', value: 'light', signals: { everyday: 3, portability: 1 } },
+      { label: 'Moderate - several apps running', desc: '10-15 browser tabs, Office apps, Teams', value: 'moderate', signals: { everyday: 2 } },
+      { label: 'Heavy - many apps and services', desc: '30+ tabs, multiple heavy apps, background processes', value: 'heavy', signals: { power: 3 } },
+      { label: 'Extreme - VMs, containers, servers', desc: 'Docker, virtual machines, local servers, CI tools', value: 'extreme', signals: { power: 4, desktop: 2 } }
+    ]
+  },
+  {
+    id: 'video',
+    text: 'Do you edit photos or video as part of your work?',
+    hint: 'Not just viewing - actively editing and producing',
+    options: [
+      { label: 'No, not at all', desc: '', value: 'none', signals: { everyday: 2 } },
+      { label: 'Occasionally - light photo editing', desc: 'Quick crops, filters, basic adjustments', value: 'light', signals: { everyday: 1, creative: 1 } },
+      { label: 'Regularly - photo and some video', desc: 'Photoshop, Lightroom, short video edits', value: 'regular', signals: { creative: 3 } },
+      { label: 'Daily - heavy video or 3D work', desc: 'Premiere, Final Cut, After Effects, 3D rendering', value: 'heavy', signals: { creative: 2, power: 3 } }
+    ]
+  },
+  {
+    id: 'ai',
+    text: 'Do you use AI or LLM tools in your work?',
+    hint: 'This includes cloud services like ChatGPT as well as running models locally on your device',
+    options: [
+      { label: 'No - I don\'t use AI tools', desc: 'Not part of my workflow at all', value: 'not_at_all', signals: { everyday: 2, budgetConscious: 1 } },
+      { label: 'Cloud AI services only', desc: 'ChatGPT, Claude, Copilot via browser', value: 'none', signals: { everyday: 2 } },
+      { label: 'Interested in running local models', desc: 'Exploring local AI but not yet required', value: 'interested', signals: { ai: 2, development: 1 } },
+      { label: 'Yes - I run local models regularly', desc: 'Ollama, llama.cpp, ML training, inference', value: 'regular', signals: { ai: 4, power: 2 } }
+    ]
+  },
+  {
+    id: 'displays',
+    text: 'How many external displays do you connect?',
+    hint: 'At your desk setup',
+    options: [
+      { label: 'None - I use the laptop screen only', desc: '', value: 'none', signals: { portability: 1 } },
+      { label: 'One external monitor', desc: 'Single monitor at my desk', value: 'one', signals: {} },
+      { label: 'Two or more monitors', desc: 'Dual display or ultrawide setup', value: 'multi', signals: { multiDisplay: 3 } }
+    ]
+  },
+  {
+    id: 'portability',
+    text: 'How important is portability to you?',
+    hint: 'How often are you away from your desk?',
+    options: [
+      { label: 'Essential - I work on the go daily', desc: 'Meetings, travel, flexible work locations', value: 'essential', signals: { portability: 4 } },
+      { label: 'Nice to have - mostly at my desk', desc: 'Occasionally take it to meetings', value: 'nice', signals: { portability: 2 } },
+      { label: 'Not important - always at my desk', desc: 'Dedicated workstation setup', value: 'none', signals: { desktop: 4 } }
+    ]
+  },
+  {
+    id: 'screensize',
+    text: 'Do you have a preference for laptop screen size?',
+    hint: 'Neo is 13" only. Air is 13.6" or 15.3". Pro is 14" or 16".',
+    options: [
+      { label: 'No preference — compact is fine', desc: '13" works well for me, especially with an external monitor', value: 'compact', signals: { portability: 1 } },
+      { label: 'Prefer a larger screen — around 14-15"', desc: 'I work a lot directly on the laptop display', value: 'medium', signals: { largeScreen: 2 } },
+      { label: 'Biggest available — 15-16"', desc: 'Screen real estate is important to how I work', value: 'large', signals: { largeScreen: 4 } }
+    ]
+  },
+  {
+    id: 'budget',
+    text: 'What is the budget priority for this device?',
+    hint: 'This helps balance capability against cost',
+    options: [
+      { label: 'Keep costs low', desc: 'Most affordable option that meets my needs', value: 'low', signals: { budgetConscious: 4, everyday: 1 } },
+      { label: 'Balanced - value for money', desc: 'Happy to invest more for meaningful capability gains', value: 'mid', signals: { everyday: 1 } },
+      { label: 'Performance first', desc: 'Get the right tool regardless of cost', value: 'high', signals: { power: 2 } }
+    ]
+  }
+];
+
+const devices = {
+  neo: {
+    id: 'neo',
+    name: 'MacBook Neo',
+    shortName: 'Neo',
+    tagline: 'The perfect everyday laptop',
+    price: '$599',
+    shopUrl: 'https://www.apple.com/shop/buy-mac/macbook-neo',
+    color: '#34c759',
+    colorBg: '#ecfdf3',
+    colorDark: '#4ade80',
+    icon: '💚',
+    weights: { everyday: 2, creative: 0.3, development: 0.2, data: 0.2, ai: 0, power: 0, portability: 2, desktop: -0.5, multiDisplay: -0.5, budgetConscious: 2.5, largeScreen: -2 },
+    specs: { chip: 'A18 Pro', cores: '6-core CPU', memory: '8 GB', storage: '256 / 512 GB', battery: '~16 hrs', display: '13" Liquid Retina', ports: '2x USB-C (1x USB 3, 1x USB 2)', wireless: 'Wi-Fi 6E, Bluetooth 6' },
+    pros: ['Most affordable Mac ever', 'Lightweight aluminium build', 'Full macOS experience', 'Handles all core Office tasks', 'Great battery for light use'],
+    cons: ['8 GB RAM only - no upgrade path', 'No Thunderbolt support', 'No backlit keyboard', 'Single 4K external display only', 'Smaller battery than Air/Pro'],
+    useCases: ['Email & calendar', 'Documents & writing', 'Web browsing', 'Video calls', 'Light scripting', 'Travel secondary device'],
+    matrix: [
+      ['Device management & security', 'yes'], ['Office apps & email', 'yes'], ['Web browsing (10-15 tabs)', 'yes'],
+      ['Video calls (Teams/Zoom)', 'yes'], ['Photo editing', 'limited'], ['Graphic design', 'limited'],
+      ['Video editing', 'no'], ['Xcode', 'limited'], ['VS Code', 'yes'],
+      ['Docker / containers', 'no'], ['Local LLM / AI', 'no'], ['Heavy multitasking', 'no'],
+      ['Virtual machines', 'no'], ['External displays', 'limited']
+    ],
+    notes: 'The MacBook Neo is a fanless design - sustained high workloads may cause CPU throttling. Dual-display output requires DisplayLink drivers and a compatible USB-C dock. Single-threaded performance exceeds M2, but multi-threaded sits around M1 level.',
+    upgradeOptions: {
+      storage: [
+        { label: '256 GB (base)', note: 'Fine for most light users who rely on cloud storage' },
+        { label: '512 GB', note: 'Recommended if you keep projects or media stored locally' }
+      ]
+    },
+    upgradeNote: 'RAM is fixed at 8 GB and cannot be upgraded — this is the only configurable option on the Neo.'
+  },
+  air: {
+    id: 'air',
+    name: 'MacBook Air',
+    shortName: 'Air',
+    tagline: 'Versatile device for most workloads',
+    price: '$1099',
+    shopUrl: 'https://www.apple.com/shop/buy-mac/macbook-air',
+    color: '#0071e3',
+    colorBg: '#e8f4fd',
+    colorDark: '#60a5fa',
+    icon: '💙',
+    weights: { everyday: 1.5, creative: 1.5, development: 1, data: 0.8, ai: 0.5, power: 0.5, portability: 1.5, desktop: 0, multiDisplay: 0.5, budgetConscious: 0.5, largeScreen: 0.5 },
+    specs: { chip: 'Apple M5', cores: '10-core CPU, up to 10-core GPU', memory: '16 / 24 / 32 GB', storage: '512 GB - 4 TB', battery: '~18 hrs', display: '13.6" or 15.3" Liquid Retina', ports: '2x Thunderbolt 4, headphone jack', wireless: 'Wi-Fi 7, Bluetooth 6' },
+    pros: ['Excellent M5 performance', 'Lightweight and portable', '16 GB RAM standard', 'Thunderbolt 4 connectivity', 'Up to 18 hours battery life'],
+    cons: ['Fanless - may throttle under sustained load', 'No Pro/Max CPU options', 'Limited to 2 external displays', 'No nano-texture display option'],
+    useCases: ['General office & productivity', 'Photo & video editing', 'Medium development work', 'Xcode & local dev environments', 'Presentations & design', 'Field work & travel'],
+    matrix: [
+      ['Device management & security', 'yes'], ['Office apps & email', 'yes'], ['Web browsing (10-15 tabs)', 'yes'],
+      ['Video calls (Teams/Zoom)', 'yes'], ['Photo editing', 'yes'], ['Graphic design', 'yes'],
+      ['Video editing', 'yes'], ['Xcode', 'yes'], ['VS Code', 'yes'],
+      ['Docker / containers', 'limited'], ['Local LLM / AI', 'limited'], ['Heavy multitasking', 'limited'],
+      ['Virtual machines', 'limited'], ['External displays', 'yes']
+    ],
+    notes: 'The MacBook Air is fanless - while M5 performance is excellent, sustained heavy workloads (compiling, rendering, long VM sessions) may cause thermal throttling. Virtual machines and containers are supported for light use. Consider the Pro if these are daily activities.',
+    upgradeOptions: {
+      ram: [
+        { label: '16 GB (base)', note: 'Handles everyday tasks and moderate multitasking comfortably' },
+        { label: '24 GB', note: 'Better for heavier multitasking, light VMs, or sustained creative work' },
+        { label: '32 GB', note: 'High-end config — may outperform a base MacBook Pro M5 for many workloads' }
+      ],
+      storage: [
+        { label: '512 GB (base)', note: 'Good starting point alongside cloud storage' },
+        { label: '1 TB', note: 'Recommended for most users' },
+        { label: '2 TB', note: 'For larger local project libraries or media' },
+        { label: '4 TB', note: 'Maximum — for extensive offline media or data' }
+      ]
+    },
+    upgradeNote: 'A maxed-out Air (32 GB RAM) may outperform a base MacBook Pro M5 (24 GB) for many everyday workloads. Worth comparing before stepping up to a Pro.'
+  },
+  pro: {
+    id: 'pro',
+    name: 'MacBook Pro',
+    shortName: 'Pro',
+    tagline: 'Additional power for demanding workloads',
+    price: '$1699',
+    shopUrl: 'https://www.apple.com/shop/buy-mac/macbook-pro',
+    color: '#a855f7',
+    colorBg: '#f3e8ff',
+    colorDark: '#c084fc',
+    icon: '💜',
+    weights: { everyday: 0.5, creative: 2, development: 2, data: 2, ai: 2, power: 2, portability: 1, desktop: 0.5, multiDisplay: 1.5, budgetConscious: -0.5, largeScreen: 1.5 },
+    specs: { chip: 'M5 / M5 Pro / M5 Max', cores: 'Up to 18-core CPU, 40-core GPU', memory: '24 - 128 GB', storage: '1 TB - 8 TB', battery: '~24 hrs', display: '14" or 16" Liquid Retina XDR', ports: '3x Thunderbolt 5, HDMI, SD, MagSafe', wireless: 'Wi-Fi 7, Bluetooth 6' },
+    pros: ['Pro and Max chip performance', 'Up to 128 GB unified memory', 'Thunderbolt 5 connectivity', 'XDR display with nano-texture option', 'Active cooling - no throttling', 'Up to 4 external displays (Max)'],
+    cons: ['Significantly more expensive', 'Heavier than Air/Neo', 'Overkill for basic office tasks'],
+    useCases: ['Heavy development & CI', 'Video production & 3D', 'Local AI / LLM workflows', 'Large dataset analysis', 'Virtual machines & containers', 'Multi-display workstations'],
+    matrix: [
+      ['Device management & security', 'yes'], ['Office apps & email', 'yes'], ['Web browsing (10-15 tabs)', 'yes'],
+      ['Video calls (Teams/Zoom)', 'yes'], ['Photo editing', 'yes'], ['Graphic design', 'yes'],
+      ['Video editing', 'yes'], ['Xcode', 'yes'], ['VS Code', 'yes'],
+      ['Docker / containers', 'yes'], ['Local LLM / AI', 'yes'], ['Heavy multitasking', 'yes'],
+      ['Virtual machines', 'limited'], ['External displays', 'yes']
+    ],
+    notes: 'The MacBook Pro features active cooling so it can sustain peak performance under heavy load without throttling. Virtual machines and containers are supported for frequent use. The M5 Max variant supports up to 128 GB unified memory for the most demanding AI and data workflows.',
+    upgradeOptions: {
+      cpu: [
+        { label: 'M5 (base)', note: 'Up to 10-core CPU — solid for most development, creative, and productivity tasks' },
+        { label: 'M5 Pro', note: 'Up to 14-core CPU — recommended for heavy compilation, sustained rendering, or local AI' },
+        { label: 'M5 Max', note: 'Up to 16-core CPU, 40-core GPU — for the most demanding compute and GPU workloads' }
+      ],
+      ram: [
+        { label: '24 GB (M5 base)', note: 'Standard — solid for development, creative work, and multitasking' },
+        { label: '24 or 48 GB (M5 Pro)', note: '48 GB recommended for large datasets, long compiles, or persistent VMs' },
+        { label: '48, 96 or 128 GB (M5 Max)', note: 'For AI/ML workflows, very large models, or extreme memory pressure' }
+      ],
+      storage: [
+        { label: '1 TB (base)', note: 'Minimum for most Pro users' },
+        { label: '2 TB', note: 'Recommended for video editors and developers with large repos' },
+        { label: '4 TB', note: 'For large media libraries or local data stores' },
+        { label: '8 TB', note: 'Maximum — for specialised high-storage workloads' }
+      ]
+    },
+    upgradeNote: 'Chip tier (M5 → M5 Pro → M5 Max) has the biggest impact on sustained performance. A high-end MacBook Air (32 GB) may match or exceed a base M5 Pro for many tasks — worth comparing before ordering.'
+  },
+  studio: {
+    id: 'studio',
+    name: 'Mac Studio',
+    shortName: 'Studio',
+    tagline: 'Desktop Mac for the heaviest workloads',
+    price: '$1999',
+    shopUrl: 'https://www.apple.com/shop/buy-mac/mac-studio',
+    color: '#f97316',
+    colorBg: '#fff7ed',
+    colorDark: '#fb923c',
+    icon: '🧡',
+    weights: { everyday: 0.2, creative: 1, development: 1.5, data: 2.5, ai: 3, power: 3, portability: -2, desktop: 3, multiDisplay: 2, budgetConscious: -0.5, largeScreen: 0 },
+    specs: { chip: 'M4 Max / M4 Ultra', cores: 'Up to 24-core CPU, 76-core GPU', memory: '64 - 192 GB', storage: '512 GB - 8 TB', battery: 'N/A - desktop', display: 'BYO - supports multiple displays', ports: '6x Thunderbolt, 2x USB-C, USB-A, HDMI, SD, Ethernet', wireless: 'Wi-Fi 6E, Bluetooth 5.3' },
+    pros: ['Ultra chip performance', 'Up to 192 GB unified memory', 'Extensive port selection', 'Continuous heavy workloads', 'Quiet desktop form factor'],
+    cons: ['Not portable', 'Expensive', 'Requires external display, keyboard, mouse'],
+    useCases: ['CI/CD & automation servers', 'Ongoing VM & container hosting', 'AI/ML training & inference', 'Heavy 3D rendering', '8K video production', 'Multi-stream workflows'],
+    matrix: [
+      ['Device management & security', 'yes'], ['Office apps & email', 'yes'], ['Web browsing (10-15 tabs)', 'yes'],
+      ['Video calls (Teams/Zoom)', 'yes'], ['Photo editing', 'yes'], ['Graphic design', 'yes'],
+      ['Video editing', 'yes'], ['Xcode', 'yes'], ['VS Code', 'yes'],
+      ['Docker / containers', 'yes'], ['Local LLM / AI', 'yes'], ['Heavy multitasking', 'yes'],
+      ['Virtual machines', 'yes'], ['External displays', 'yes']
+    ],
+    notes: 'The Mac Studio is designed for ongoing, unattended heavy workloads - CI pipelines, automation, persistent VMs, and local AI training. It uses active cooling in a compact desktop enclosure. The M4 Ultra variant offers the highest memory and GPU core count in any Mac.',
+    upgradeOptions: {
+      cpu: [
+        { label: 'M4 Max (base)', note: 'Up to 14-core CPU, 32-core GPU — powerful for most professional workflows' },
+        { label: 'M4 Ultra', note: 'Up to 28-core CPU, 60-core GPU — for AI training, 8K production, and maximum throughput' }
+      ],
+      ram: [
+        { label: '64 GB (M4 Max)', note: 'Base — handles most professional AI inference and data pipeline tasks' },
+        { label: '128 GB (M4 Max or Ultra)', note: 'For large model inference, persistent VMs, or heavy data pipelines' },
+        { label: '192 GB (M4 Ultra)', note: 'Maximum — for the most memory-intensive AI and rendering workflows' }
+      ],
+      storage: [
+        { label: '512 GB (base)', note: 'Use alongside network storage or for a dedicated single-purpose role' },
+        { label: '1 TB', note: 'Good general starting point' },
+        { label: '2 TB', note: 'Recommended for most Studio workloads' },
+        { label: '4 TB', note: 'For large local datasets or media archives' },
+        { label: '8 TB', note: 'Maximum — for high-throughput local storage needs' }
+      ]
+    },
+    upgradeNote: 'RAM and storage are fixed at purchase — plan ahead. Chip tier (M4 Max vs M4 Ultra) determines your memory ceiling and maximum GPU performance.'
+  }
+};
+
+let currentQ = 0;
+let answers = {};
+
+function injectDeviceStyles() {
+  const rules = Object.values(devices).map(d => `
+    .result-hero[data-device="${d.id}"]::before { background: ${d.color}; }
+    .result-icon[data-device="${d.id}"] { background: ${d.colorBg}; }
+    .result-label[data-device="${d.id}"] { color: ${d.color}; }
+    .score-graph-label[data-device="${d.id}"] { color: ${d.color}; }
+    .score-graph-bar-fill[data-device="${d.id}"] { background: ${d.color}; }
+    .debug-device-name[data-device="${d.id}"] { color: ${d.colorDark}; }
+    .debug-final-bar[data-device="${d.id}"] { background: ${d.colorDark}; }
+  `).join('');
+  const s = document.createElement('style');
+  s.textContent = rules;
+  document.head.appendChild(s);
+}
+
+function score() {
+  const deviceKeys = Object.keys(devices);
+  const s = Object.fromEntries(deviceKeys.map(k => [k, 0]));
+  for (const q of questions) {
+    const answer = answers[q.id];
+    if (!answer) continue;
+    const opt = q.options.find(o => o.value === answer);
+    if (!opt || !opt.signals) continue;
+    for (const [dim, strength] of Object.entries(opt.signals)) {
+      for (const dk of deviceKeys) {
+        s[dk] += strength * (devices[dk].weights[dim] || 0);
+      }
+    }
+  }
+  let best = deviceKeys[0];
+  for (const dk of deviceKeys) { if (s[dk] > s[best]) best = dk; }
+  return { scores: s, best };
+}
+
+function render() {
+  const q = questions[currentQ];
+  const total = questions.length;
+  document.getElementById('progress-label').textContent = `Question ${currentQ + 1} of ${total}`;
+  document.getElementById('progress-fill').style.width = `${((currentQ) / total) * 100}%`;
+
+  const selected = answers[q.id] || null;
+
+  let html = `<div class="question-card" key="${q.id}">
+    <div class="question-number">Q${currentQ + 1}</div>
+    <div class="question-text">${q.text}</div>
+    <div class="question-hint">${q.hint}</div>
+    <div class="options">`;
+
+  q.options.forEach(opt => {
+    const sel = selected === opt.value ? ' selected' : '';
+    html += `<div class="option${sel}" onclick="selectOption('${q.id}','${opt.value}')">
+      <div class="option-radio"></div>
+      <div><div class="option-label">${opt.label}</div>${opt.desc ? `<div class="option-desc">${opt.desc}</div>` : ''}</div>
+    </div>`;
+  });
+
+  html += `</div>
+    <div class="nav">
+      <button class="btn btn-secondary" onclick="prev()" ${currentQ === 0 ? 'style="visibility:hidden"' : ''}>← Back</button>
+      <button class="btn btn-primary" id="next-btn" onclick="next()" ${!selected ? 'disabled' : ''}>${currentQ === total - 1 ? 'See my result' : 'Continue →'}</button>
+    </div>
+  </div>`;
+
+  document.getElementById('question-container').innerHTML = html;
+  if (CONFIG.debug) renderDebug();
+}
+
+function renderDebug() {
+  const panel = document.getElementById('debug-panel');
+  panel.classList.remove('hidden');
+
+  const s = score().scores;
+  const best = Object.entries(s).sort((a, b) => b[1] - a[1])[0][0];
+
+  const answeredQs = questions.filter(q => answers[q.id]);
+  const answerSummary = answeredQs.map(q => {
+    const opt = q.options.find(o => o.value === answers[q.id]);
+    return `<span>${q.id}</span>: ${opt ? opt.label : answers[q.id]}`;
+  }).join(' · ');
+
+  panel.innerHTML = `
+    <div class="debug-title">⚙ Debug - live scoring (${answeredQs.length}/${questions.length} answered)</div>
+    <div class="debug-scores">
+      ${Object.entries(s).map(([k, v]) => `
+        <div class="debug-device${k === best && v > 0 ? ' leading' : ''}">
+          <div class="debug-device-name" data-device="${k}">${devices[k].shortName}</div>
+          <div class="debug-device-score">${Math.round(v * 10) / 10}</div>
+        </div>
+      `).join('')}
+    </div>
+    ${answerSummary ? `<div class="debug-answers">${answerSummary}</div>` : ''}
+  `;
+}
+
+function selectOption(qid, val) {
+  answers[qid] = val;
+  render();
+}
+
+function prev() {
+  if (currentQ > 0) { currentQ--; render(); }
+}
+
+function next() {
+  if (!answers[questions[currentQ].id]) return;
+  if (currentQ < questions.length - 1) {
+    currentQ++;
+    render();
+  } else {
+    showResult();
+  }
+}
+
+function showResult() {
+  document.getElementById('quiz-section').classList.add('hidden');
+  document.querySelector('.page').classList.add('wide');
+  const { scores, best } = score();
+  const d = devices[best];
+
+  const priceStr = CONFIG.appleCareSuffix
+    ? `From ${d.price} (${CONFIG.appleCareSuffix})`
+    : `From ${d.price}`;
+
+  // Sort matrix: yes first, then limited, then no
+  const statusOrder = { yes: 0, limited: 1, no: 2 };
+  const sortedMatrix = [...d.matrix].sort((a, b) => statusOrder[a[1]] - statusOrder[b[1]]);
+
+  let matrixHtml = sortedMatrix.map(([task, status]) =>
+    `<div class="matrix-row"><span class="matrix-task">${task}</span><span class="matrix-badge ${status}">${status === 'yes' ? 'YES' : status === 'limited' ? 'LIMITED' : 'NO'}</span></div>`
+  ).join('');
+
+  let prosHtml = d.pros.map(p => `<li><span class="icon pro">✓</span>${p}</li>`).join('');
+  let consHtml = d.cons.map(c => `<li><span class="icon con">✗</span>${c}</li>`).join('');
+  let tagsHtml = d.useCases.map(u => `<span class="use-tag">${u}</span>`).join('');
+
+  let specsHtml = '';
+  const specLabels = { chip: 'Chip', cores: 'CPU/GPU', memory: 'Memory', storage: 'Storage', battery: 'Battery', display: 'Display', ports: 'Ports', wireless: 'Wireless' };
+  for (const [k, v] of Object.entries(d.specs)) {
+    specsHtml += `<div class="spec-item"><div class="spec-label">${specLabels[k]}</div><div class="spec-value">${v}</div></div>`;
+  }
+
+  // Runner up
+  let sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+  let runnerUp = sorted[1];
+  let ruDevice = devices[runnerUp[0]];
+  const ruPriceStr = CONFIG.appleCareSuffix
+    ? `From ${ruDevice.price} (${CONFIG.appleCareSuffix})`
+    : `From ${ruDevice.price}`;
+
+  document.getElementById('result-section').innerHTML = `
+    <div class="result-container">
+      <div class="result-card">
+        <div class="result-hero" data-device="${d.id}">
+          <div class="result-icon" data-device="${d.id}">${d.icon}</div>
+          <div class="result-label" data-device="${d.id}">Our recommendation</div>
+          <div class="result-device">${d.name}</div>
+          <div class="result-tagline">${d.tagline}</div>
+          <div style="margin-top:8px;font-size:14px;font-weight:600;color:var(--text-secondary)">${priceStr}${d.shopUrl ? ` · <a href="${d.shopUrl}" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none;font-weight:600">Shop ↗</a>` : ''}</div>
+        </div>
+        <div class="result-body">
+          <div class="result-columns">
+            <div class="result-col-left">
+              <div class="result-section-title">Key specifications</div>
+              <div class="spec-grid">${specsHtml}</div>
+
+              <div class="result-section-title">Recommended for</div>
+              <div class="use-cases">${tagsHtml}</div>
+
+              <div class="result-section-title">Pros & cons</div>
+              <div class="pro-con-grid">
+                <div><div class="pro-con-label pros">Pros</div><ul class="pro-con-list">${prosHtml}</ul></div>
+                <div><div class="pro-con-label cons">Cons</div><ul class="pro-con-list">${consHtml}</ul></div>
+              </div>
+
+              <div style="margin-top:20px;padding:14px 16px;background:var(--surface-alt);border-radius:var(--radius-sm);font-size:13px;color:var(--text-secondary)">
+                <strong style="color:var(--text)">Also consider:</strong> ${ruDevice.name} - ${ruDevice.tagline.toLowerCase()} (${ruPriceStr})
+              </div>
+            </div>
+            <div class="result-col-right">
+              <div class="result-section-title">Performance matrix</div>
+              ${matrixHtml}
+
+              ${buildScoreGraph(scores, best)}
+
+              <div class="note-box">
+                <strong>Note:</strong> ${d.notes}
+              </div>
+
+              ${CONFIG.debug ? buildDebugFinal(scores, best) : ''}
+            </div>
+          </div>
+          ${buildUpgradeOptions(best)}
+        </div>
+      </div>
+      <div style="text-align:center">
+        <button class="btn btn-restart" onclick="restart()">↻ Start over</button>
+      </div>
+    </div>`;
+
+  if (CONFIG.debug) document.getElementById('debug-panel').classList.add('hidden');
+  document.getElementById('result-section').classList.remove('hidden');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function buildScoreGraph(scores, best) {
+  const total = Object.values(scores).reduce((a, b) => a + b, 0) || 1;
+  const maxS = Math.max(...Object.values(scores), 1);
+  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+  const topScore = sorted[0][1];
+  const runnerScore = sorted[1][1];
+  const isClose = topScore > 0 && runnerScore > 0 && (topScore - runnerScore) <= 3;
+
+  return `
+    <div class="score-graph">
+      <div class="score-graph-title">How you matched</div>
+      ${sorted.map(([k, v]) => {
+        const positiveTotal = Object.values(scores).filter(x => x > 0).reduce((a, b) => a + b, 0) || 1;
+        const pct = v > 0 ? Math.round((v / positiveTotal) * 100) : 0;
+        const barW = Math.max(0, maxS > 0 ? (v / maxS) * 100 : 0);
+        return `<div class="score-graph-row">
+          <div class="score-graph-label" data-device="${k}">${devices[k].shortName}</div>
+          <div class="score-graph-bar-track">
+            <div class="score-graph-bar-fill" data-device="${k}" style="width:${barW}%"></div>
+          </div>
+          <div class="score-graph-pct">${pct}%</div>
+        </div>`;
+      }).join('')}
+      ${isClose ? `<div class="score-graph-hint">Your top two results were close - you may want to compare both options with your manager or IT before deciding.</div>` : ''}
+    </div>`;
+}
+
+function buildDebugFinal(scores, best) {
+  const maxS = Math.max(...Object.values(scores), 1);
+  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+
+  const answerSummary = questions.map(q => {
+    const opt = q.options.find(o => o.value === answers[q.id]);
+    return `<span style="color:#e7e5e4">${q.id}</span>: ${opt ? opt.label : '-'}`;
+  }).join('<br>');
+
+  return `
+    <div class="debug-final">
+      <div class="debug-title">⚙ Debug - final scores</div>
+      ${sorted.map(([k, v]) => `
+        <div class="debug-final-row">
+          <div class="debug-final-label" data-device="${k}">${devices[k].shortName}</div>
+          <div class="debug-final-bar-bg">
+            <div class="debug-final-bar" data-device="${k}" style="width:${Math.max(0, (v / maxS) * 100)}%"></div>
+          </div>
+          <div class="debug-final-val">${Math.round(v * 10) / 10}</div>
+        </div>
+      `).join('')}
+      <div class="debug-final-winner">
+        Winner: <strong>${devices[best].name}</strong> (score ${Math.round(scores[best] * 10) / 10})
+        · Runner-up: ${devices[sorted[1][0]].name} (${Math.round(sorted[1][1] * 10) / 10})
+        · Gap: ${Math.round((scores[best] - sorted[1][1]) * 10) / 10} pts
+      </div>
+      <div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.06);font-size:10px;color:#a8a29e;line-height:1.8">
+        ${answerSummary}
+      </div>
+    </div>`;
+}
+
+function buildUpgradeOptions(deviceKey) {
+  const d = devices[deviceKey];
+  if (!d.upgradeOptions) return '';
+
+  const sectionLabels = { cpu: 'CPU / Chip', ram: 'Memory (RAM)', storage: 'Storage' };
+
+  const sectionsHtml = Object.entries(d.upgradeOptions).map(([key, options]) => `
+    <div>
+      <div class="upgrade-category-label">${sectionLabels[key]}</div>
+      <div class="upgrade-options">
+        ${options.map((opt, i) => `
+          <div class="upgrade-option${i === 0 ? ' base' : ''}">
+            <div class="upgrade-option-label">${opt.label}</div>
+            ${opt.note ? `<div class="upgrade-option-note">${opt.note}</div>` : ''}
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+
+  return `
+    <div class="upgrade-section">
+      <div class="result-section-title">Configuration options</div>
+      <div class="upgrade-grid">${sectionsHtml}</div>
+      ${d.upgradeNote ? `<div class="upgrade-overlap-note">${d.upgradeNote}</div>` : ''}
+    </div>
+  `;
+}
+
+function restart() {
+  currentQ = 0;
+  answers = {};
+  document.querySelector('.page').classList.remove('wide');
+  document.getElementById('result-section').classList.add('hidden');
+  document.getElementById('result-section').innerHTML = '';
+  document.getElementById('quiz-section').classList.remove('hidden');
+  if (CONFIG.debug) document.getElementById('debug-panel').classList.remove('hidden');
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+injectDeviceStyles();
+(function applyConfig() {
+  document.title = CONFIG.title;
+  const logo = document.querySelector('.site-logo');
+  if (logo) { logo.src = CONFIG.logoUrl; logo.alt = CONFIG.logoAlt; }
+  const header = document.querySelector('.site-header');
+  if (header) header.style.background = CONFIG.bannerGradient;
+  const h1 = document.querySelector('.site-header-text h1');
+  if (h1) h1.textContent = CONFIG.title;
+  const sub = document.querySelector('.site-header-text p');
+  if (sub) sub.textContent = CONFIG.subtitle;
+})();
+render();
+</script>
+</body>
+</html>
