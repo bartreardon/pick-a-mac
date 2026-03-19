@@ -8,6 +8,12 @@ Everything is self contained. Open `pick-a-mac.html` directly in any browser or 
 
 <img width="462" height="483" alt="image" src="https://github.com/user-attachments/assets/b1050564-8090-4588-9707-dc40c13cda28" />
 
+### Quick Start
+
+ 1. [Download the zip](https://github.com/bartreardon/pick-a-mac/archive/refs/heads/main.zip)
+ 2. Unzip and open the `pick-a-mac-main` folder
+ 3. Double-click `pick-a-mac.html` to open in your default browser
+
 ## How it works
 
 The quiz asks single-choice questions covering topics like primary role, app usage, multitasking load, media editing, AI tool usage, external displays, portability, and budget. Each answer carries **signals** — weighted dimensions that contribute to per-device scores. When all questions are answered the device with the highest accumulated score is recommended, alongside:
@@ -64,7 +70,7 @@ Set `debug: true` to show a live scoring panel during the quiz, displaying real-
 
 ## Customising questions
 
-Questions are defined in the `questions` array (around line 722 in the file). Each entry looks like this:
+Questions are defined in the `questions` array. Each entry looks like this:
 
 ```js
 {
@@ -111,7 +117,9 @@ Delete the entry from the `questions` array. No other changes are needed — the
 
 ## Customising devices
 
-Devices are defined in the `devices` object (around line 820 in the file). Each key is the device's `id`. A full device entry looks like this:
+Devices are defined in the `devices` object. Each key is the device's `id`. Sample device configs include MacBook Neo, MacBook Air, MacBook Pro and Mac Studio.
+
+A full device entry looks like this:
 
 ```js
 {
@@ -224,14 +232,6 @@ To introduce a new signal dimension, add it to the relevant answer options' `sig
 
 ---
 
-## Devices
-
-The quiz currently recommends:
-
-- MacBook Neo
-- MacBook Air
-- MacBook Pro
-- Mac Studio
 
 ## Technical notes
 
