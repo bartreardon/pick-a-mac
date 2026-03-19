@@ -4,7 +4,7 @@ An interactive, single-file web quiz that helps users find the right Mac for the
 
 ## Usage
 
-Open `mac-quiz.html` directly in any browser — no server, build step, or internet connection required.
+Open `pick-a-mac.html` directly in any browser — no server, build step, or internet connection required.
 
 ## How it works
 
@@ -20,7 +20,7 @@ The quiz asks single-choice questions covering topics like primary role, app usa
 
 ## Configuration
 
-All configurable options are in the `CONFIG` block at the top of `mac-quiz.html`:
+All configurable options are in the `CONFIG` block at the top of `pick-a-mac.html`:
 
 | Property | Description | Default |
 |---|---|---|
