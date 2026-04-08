@@ -948,7 +948,7 @@ const devices = {
     colorDark: '#fb923c',
     icon: '🧡',
     weights: { everyday: 0.2, creative: 1, development: 1.5, data: 2.5, ai: 3, power: 3, portability: -2, desktop: 3, multiDisplay: 2, budgetConscious: -0.5, largeScreen: 0 },
-    specs: { chip: 'M4 Max / M4 Ultra', cores: 'Up to 24-core CPU, 76-core GPU', memory: '64 - 192 GB', storage: '512 GB - 8 TB', battery: 'N/A - desktop', display: 'BYO - supports multiple displays', ports: '6x Thunderbolt, 2x USB-C, USB-A, HDMI, SD, Ethernet', wireless: 'Wi-Fi 6E, Bluetooth 5.3' },
+    specs: { chip: 'M4 Max / M3 Ultra', cores: 'Up to 32-core CPU, 80-core GPU', memory: '36 - 256 GB', storage: '512 GB - 16 TB', battery: 'N/A - desktop', display: 'BYO - supports multiple displays', ports: '6x Thunderbolt, 2x USB-C, USB-A, HDMI, SD, Ethernet', wireless: 'Wi-Fi 6E, Bluetooth 5.3' },
     pros: ['Ultra chip performance', 'Up to 192 GB unified memory', 'Extensive port selection', 'Continuous heavy workloads', 'Quiet desktop form factor'],
     cons: ['Not portable', 'Expensive', 'Requires external display, keyboard, mouse'],
     useCases: ['CI/CD & automation servers', 'Ongoing VM & container hosting', 'AI/ML training & inference', 'Heavy 3D rendering', '8K video production', 'Multi-stream workflows'],
@@ -959,26 +959,29 @@ const devices = {
       ['Docker / containers', 'yes'], ['Local LLM / AI', 'yes'], ['Heavy multitasking', 'yes'],
       ['Virtual machines', 'yes'], ['External displays', 'yes']
     ],
-    notes: 'The Mac Studio is designed for ongoing, unattended heavy workloads - CI pipelines, automation, persistent VMs, and local AI training. It uses active cooling in a compact desktop enclosure. The M4 Ultra variant offers the highest memory and GPU core count in any Mac.',
+    notes: 'The Mac Studio is designed for ongoing, unattended heavy workloads - CI pipelines, automation, persistent VMs, and local AI training. It uses active cooling in a compact desktop enclosure. The M3 Ultra variant offers the highest memory and GPU core count in any Mac.',
     upgradeOptions: {
       cpu: [
-        { label: 'M4 Max (base)', note: 'Up to 14-core CPU, 32-core GPU — powerful for most professional workflows' },
-        { label: 'M4 Ultra', note: 'Up to 28-core CPU, 60-core GPU — for AI training, 8K production, and maximum throughput' }
+        { label: 'M4 Max (base)', note: '14-core CPU, 32-core GPU — powerful for most professional workflows' },
+        { label: 'M4 Max', note: '16-core CPU, 40-core GPU — powerful for most professional workflows' },
+        { label: 'M3 Ultra', note: '28-core CPU, 60-core GPU — for AI training, 8K production, and maximum throughput' },
+        { label: 'M3 Ultra', note: '32-core CPU, 80-core GPU — for AI training, 8K production, and maximum throughput' }
       ],
       ram: [
-        { label: '64 GB (M4 Max)', note: 'Base — handles most professional AI inference and data pipeline tasks' },
-        { label: '128 GB (M4 Max or Ultra)', note: 'For large model inference, persistent VMs, or heavy data pipelines' },
-        { label: '192 GB (M4 Ultra)', note: 'Maximum — for the most memory-intensive AI and rendering workflows' }
+        { label: '36 GB (M4 Max Base CPU)', note: 'Base — handles most professional workflows' },
+        { label: '48, 64, 128 GB (M4 Max)', note: 'handles moderate AI inference and data pipeline tasks' },
+        { label: '96, 256 GB (M3 Ultra)', note: 'For large model inference, persistent VMs, or heavy data pipelines' }
       ],
       storage: [
-        { label: '512 GB (base)', note: 'Use alongside network storage or for a dedicated single-purpose role' },
+        { label: '512 GB (M4 Max base)', note: 'Use alongside network storage or for a dedicated single-purpose role' },
         { label: '1 TB', note: 'Good general starting point' },
         { label: '2 TB', note: 'Recommended for most Studio workloads' },
         { label: '4 TB', note: 'For large local datasets or media archives' },
-        { label: '8 TB', note: 'Maximum — for high-throughput local storage needs' }
+        { label: '8 TB', note: 'Maximum — for high-throughput local storage needs' },
+        { label: '16 TB (M3 Ultra)', note: 'Mega — The most storage' }
       ]
     },
-    upgradeNote: 'RAM and storage are fixed at purchase — plan ahead. Chip tier (M4 Max vs M4 Ultra) determines your memory ceiling and maximum GPU performance.'
+    upgradeNote: 'RAM and storage are fixed at purchase — plan ahead. Chip tier (M4 Max vs M3 Ultra) determines your memory ceiling and maximum GPU performance.'
   }
 };
 
