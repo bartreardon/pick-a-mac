@@ -4,12 +4,14 @@ An interactive web quiz that helps users find the right Mac for their needs. Ans
 
 ## Usage
 
-No dependencies, frameworks, or build tools — just two files:
+No dependencies, frameworks, or build tools — just a few files that live in the same folder:
 
 - `pick-a-mac.html` — the quiz UI, questions, and scoring logic
-- `devices.js` — all device models, specs, and pricing
+- `overview.html` — a comparison page graphing how every device scores in each category
+- `devices.js` — all device models, specs, and pricing (shared by both pages)
+- `styles.css` — the shared visual style (shared by both pages)
 
-Keep them in the same folder and open `pick-a-mac.html` directly in any browser or host on any web server.
+Open `pick-a-mac.html` directly in any browser or host on any web server. The two pages link to each other from the header.
 
 <img width="462" height="483" alt="image" src="https://github.com/user-attachments/assets/b1050564-8090-4588-9707-dc40c13cda28" />
 
