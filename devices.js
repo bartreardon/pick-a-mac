@@ -9,8 +9,9 @@
 // To remove a system:     delete its entry — scoring and rendering adapt
 //                         automatically.
 //
-// Prices are Australian MSRP (inc. GST), sourced from everymac.com
-// "Original Prices in Australia" pages (update published April 2026).
+// Base "from" prices are Australian retail (inc. GST) from Apple's live AU
+// store (apple.com/au), captured July 2026. Device specs are from everymac.com.
+// Prices can change without notice — re-check apple.com/au before relying on them.
 // Last updated: July 2026.
 // ──────────────────────────────────────────────────────────────────────────
 
@@ -20,7 +21,7 @@ const devices = {
     name: 'MacBook Neo',
     shortName: 'Neo',
     tagline: 'The perfect everyday laptop',
-    price: 'A$899',
+    price: 'A$1049',
     shopUrl: 'https://www.apple.com/au/shop/buy-mac/macbook-neo',
     color: '#34c759',
     colorBg: '#ecfdf3',
@@ -41,8 +42,8 @@ const devices = {
     notes: 'The MacBook Neo is a fanless design - sustained high workloads may cause CPU throttling. Dual-display output requires DisplayLink drivers and a compatible USB-C dock. Single-threaded performance exceeds M2, but multi-threaded sits around M1 level.',
     upgradeOptions: {
       storage: [
-        { label: '256 GB (base) — A$899', note: 'Fine for most light users who rely on cloud storage' },
-        { label: '512 GB — A$1099', note: 'Recommended if you keep projects or media stored locally' }
+        { label: '256 GB (base)', note: 'Fine for most light users who rely on cloud storage' },
+        { label: '512 GB', note: 'Recommended if you keep projects or media stored locally' }
       ]
     },
     upgradeNote: 'RAM is fixed at 8 GB and cannot be upgraded — this is the only configurable option on the Neo.'
@@ -52,7 +53,7 @@ const devices = {
     name: 'MacBook Air',
     shortName: 'Air',
     tagline: 'Versatile device for most workloads',
-    price: 'A$1799',
+    price: 'A$2099',
     shopUrl: 'https://www.apple.com/au/shop/buy-mac/macbook-air',
     color: '#0071e3',
     colorBg: '#e8f4fd',
@@ -73,8 +74,8 @@ const devices = {
     notes: 'The MacBook Air is fanless - while M5 performance is excellent, sustained heavy workloads (compiling, rendering, long VM sessions) may cause thermal throttling. Virtual machines and containers are supported for light use. Consider the Pro if these are daily activities.',
     upgradeOptions: {
       display: [
-        { label: '13.6" — from A$1799', note: 'Base model has an 8-core GPU; 10-core GPU configs from A$2099' },
-        { label: '15.3" — from A$2199', note: 'All 15" configs include the 10-core GPU' }
+        { label: '13.6" — from A$2099', note: 'The more compact, lighter option' },
+        { label: '15.3" — from A$2499', note: 'Larger display, same M5 chip and memory options' }
       ],
       ram: [
         { label: '16 GB (base)', note: 'Handles everyday tasks and moderate multitasking comfortably' },
@@ -95,7 +96,7 @@ const devices = {
     name: 'MacBook Pro',
     shortName: 'Pro',
     tagline: 'Additional power for demanding workloads',
-    price: 'A$2499',
+    price: 'A$3199',
     shopUrl: 'https://www.apple.com/au/shop/buy-mac/macbook-pro',
     color: '#a855f7',
     colorBg: '#f3e8ff',
@@ -116,13 +117,13 @@ const devices = {
     notes: 'The MacBook Pro features active cooling so it can sustain peak performance under heavy load without throttling. Virtual machines and containers are supported for frequent use. The M5 Max variant supports up to 128 GB unified memory for the most demanding AI and data workflows.',
     upgradeOptions: {
       display: [
-        { label: '14" — from A$2499', note: 'Available with M5, M5 Pro, or M5 Max' },
-        { label: '16" — from A$4299', note: 'M5 Pro or M5 Max only' }
+        { label: '14" — from A$3199', note: 'Available with M5, M5 Pro, or M5 Max' },
+        { label: '16" — from A$4799', note: 'M5 Pro or M5 Max only' }
       ],
       cpu: [
-        { label: 'M5 (base) — from A$2499', note: '10-core CPU, 10-core GPU — solid for most development, creative, and productivity tasks' },
-        { label: 'M5 Pro — from A$3499', note: '15- or 18-core CPU — recommended for heavy compilation, sustained rendering, or local AI' },
-        { label: 'M5 Max — from A$5799', note: '18-core CPU, up to 40-core GPU — for the most demanding compute and GPU workloads' }
+        { label: 'M5 (base) — from A$3199', note: '10-core CPU, 10-core GPU — solid for most development, creative, and productivity tasks' },
+        { label: 'M5 Pro — from A$3999', note: '15- or 18-core CPU — recommended for heavy compilation, sustained rendering, or local AI' },
+        { label: 'M5 Max — from A$5199', note: '18-core CPU, up to 40-core GPU — for the most demanding compute and GPU workloads' }
       ],
       ram: [
         { label: '24 GB (M5 base)', note: 'Standard — solid for development, creative work, and multitasking' },
@@ -143,7 +144,7 @@ const devices = {
     name: 'Mac Studio',
     shortName: 'Studio',
     tagline: 'Desktop Mac for the heaviest workloads',
-    price: 'A$3499',
+    price: 'A$4299',
     shopUrl: 'https://www.apple.com/au/shop/buy-mac/mac-studio',
     color: '#f97316',
     colorBg: '#fff7ed',
@@ -164,10 +165,10 @@ const devices = {
     notes: 'The Mac Studio is designed for ongoing, unattended heavy workloads - CI pipelines, automation, persistent VMs, and local AI training. It uses active cooling in a compact desktop enclosure. The M3 Ultra variant offers the highest memory and GPU core count in any Mac.',
     upgradeOptions: {
       cpu: [
-        { label: 'M4 Max (base) — A$3499', note: '14-core CPU, 32-core GPU — powerful for most professional workflows' },
-        { label: 'M4 Max — A$4249', note: '16-core CPU, 40-core GPU — powerful for most professional workflows' },
-        { label: 'M3 Ultra — A$6999', note: '28-core CPU, 60-core GPU — for AI training, 8K production, and maximum throughput' },
-        { label: 'M3 Ultra — A$9249', note: '32-core CPU, 80-core GPU — for AI training, 8K production, and maximum throughput' }
+        { label: 'M4 Max (base) — from A$4299', note: '14-core CPU, 32-core GPU — powerful for most professional workflows' },
+        { label: 'M4 Max', note: '16-core CPU, 40-core GPU — powerful for most professional workflows' },
+        { label: 'M3 Ultra — from A$9099', note: '28-core CPU, 60-core GPU — for AI training, 8K production, and maximum throughput' },
+        { label: 'M3 Ultra', note: '32-core CPU, 80-core GPU — for AI training, 8K production, and maximum throughput' }
       ],
       ram: [
         { label: '36 GB (M4 Max Base CPU)', note: 'Base — handles most professional workflows' },
@@ -190,7 +191,7 @@ const devices = {
     name: 'Mac mini',
     shortName: 'mini',
     tagline: 'The most affordable desktop Mac',
-    price: 'A$999',
+    price: 'A$1299',
     shopUrl: 'https://www.apple.com/au/shop/buy-mac/mac-mini',
     color: '#06b6d4',
     colorBg: '#ecfeff',
@@ -211,14 +212,14 @@ const devices = {
     notes: 'The Mac mini pairs desktop performance with the lowest entry price of any Mac. The M4 Pro configuration adds Thunderbolt 5 and enough cores for sustained development, rendering, and container workloads. You supply your own display, keyboard, and mouse.',
     upgradeOptions: {
       cpu: [
-        { label: 'M4 — from A$999', note: '10-core CPU, 10-core GPU — strong for everyday and moderate pro work' },
-        { label: 'M4 Pro — A$2199', note: '12-core CPU, 16-core GPU — for heavier development and creative workloads' },
-        { label: 'M4 Pro — A$2499', note: '14-core CPU, 20-core GPU — top configuration for sustained compute' }
+        { label: 'M4 (base) — from A$1299', note: '10-core CPU, 10-core GPU — strong for everyday and moderate pro work' },
+        { label: 'M4 Pro', note: '12-core CPU, 16-core GPU — for heavier development and creative workloads' },
+        { label: 'M4 Pro', note: '14-core CPU, 20-core GPU — top configuration for sustained compute' }
       ],
       storage: [
-        { label: '256 GB (base) — A$999', note: 'Fine alongside cloud or network storage' },
-        { label: '512 GB — A$1299', note: 'Comfortable for most users' },
-        { label: '1 TB — A$1599', note: 'Recommended for local projects and media' },
+        { label: '256 GB (base)', note: 'Fine alongside cloud or network storage' },
+        { label: '512 GB', note: 'Comfortable for most users' },
+        { label: '1 TB', note: 'Recommended for local projects and media' },
         { label: '2 TB - 8 TB', note: 'For large local datasets or media libraries' }
       ]
     },
@@ -229,7 +230,7 @@ const devices = {
     name: 'iMac',
     shortName: 'iMac',
     tagline: 'All-in-one desktop with a built-in display',
-    price: 'A$1999',
+    price: 'A$2399',
     shopUrl: 'https://www.apple.com/au/shop/buy-mac/imac',
     color: '#ec4899',
     colorBg: '#fdf2f8',
@@ -250,8 +251,8 @@ const devices = {
     notes: 'The 24" iMac is an all-in-one desktop with a built-in 4.5K Retina display, so there is nothing extra to buy. It uses the standard M4 chip (no Pro/Max option), making it ideal for everyday productivity and creative work rather than the heaviest compute or AI workloads.',
     upgradeOptions: {
       cpu: [
-        { label: 'M4 8-core — A$1999', note: '8-core GPU, 2 Thunderbolt ports — everyday productivity' },
-        { label: 'M4 10-core — from A$2399', note: '10-core GPU, 4 Thunderbolt ports, Gigabit Ethernet option' }
+        { label: 'M4 (base) — from A$2399', note: 'Up to 10-core CPU and GPU; entry config has 2 Thunderbolt ports' },
+        { label: 'M4 10-core', note: '4 Thunderbolt ports and a Gigabit Ethernet option' }
       ],
       ram: [
         { label: '16 GB (base)', note: 'Handles everyday tasks and light creative work' },
