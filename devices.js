@@ -184,5 +184,86 @@ const devices = {
       ]
     },
     upgradeNote: 'RAM and storage are fixed at purchase — plan ahead. Chip tier (M4 Max vs M3 Ultra) determines your memory ceiling and maximum GPU performance.'
+  },
+  mini: {
+    id: 'mini',
+    name: 'Mac mini',
+    shortName: 'mini',
+    tagline: 'The most affordable desktop Mac',
+    price: 'A$999',
+    shopUrl: 'https://www.apple.com/au/shop/buy-mac/mac-mini',
+    color: '#06b6d4',
+    colorBg: '#ecfeff',
+    colorDark: '#22d3ee',
+    icon: '🩵',
+    weights: { everyday: 1.2, creative: 0.8, development: 1.2, data: 1, ai: 0.8, power: 1, portability: -2, desktop: 2.5, multiDisplay: 1, budgetConscious: 1.5, largeScreen: 0 },
+    specs: { chip: 'M4 / M4 Pro', cores: 'Up to 14-core CPU, 20-core GPU', memory: '16 - 64 GB', storage: '256 GB - 8 TB', battery: 'N/A - desktop', display: 'BYO - up to 3 displays', ports: '3x Thunderbolt (4/5), 2x USB-C, HDMI, Ethernet, headphone', wireless: 'Wi-Fi 6E, Bluetooth 5.3' },
+    pros: ['Most affordable desktop Mac', 'M4 Pro option for serious power', 'Compact and quiet', 'Extensive port selection', 'Great performance per dollar'],
+    cons: ['Not portable', 'Requires external display, keyboard, mouse', 'RAM and storage fixed at purchase'],
+    useCases: ['Desktop productivity', 'Software development', 'Home/office server', 'Light CI & automation', 'Photo & video editing', 'Data analysis'],
+    matrix: [
+      ['Device management & security', 'yes'], ['Office apps & email', 'yes'], ['Web browsing (10-15 tabs)', 'yes'],
+      ['Video calls (Teams/Zoom)', 'yes'], ['Photo editing', 'yes'], ['Graphic design', 'yes'],
+      ['Video editing', 'yes'], ['Xcode', 'yes'], ['VS Code', 'yes'],
+      ['Docker / containers', 'yes'], ['Local LLM / AI', 'limited'], ['Heavy multitasking', 'yes'],
+      ['Virtual machines', 'yes'], ['External displays', 'yes']
+    ],
+    notes: 'The Mac mini pairs desktop performance with the lowest entry price of any Mac. The M4 Pro configuration adds Thunderbolt 5 and enough cores for sustained development, rendering, and container workloads. You supply your own display, keyboard, and mouse.',
+    upgradeOptions: {
+      cpu: [
+        { label: 'M4 — from A$999', note: '10-core CPU, 10-core GPU — strong for everyday and moderate pro work' },
+        { label: 'M4 Pro — A$2199', note: '12-core CPU, 16-core GPU — for heavier development and creative workloads' },
+        { label: 'M4 Pro — A$2499', note: '14-core CPU, 20-core GPU — top configuration for sustained compute' }
+      ],
+      storage: [
+        { label: '256 GB (base) — A$999', note: 'Fine alongside cloud or network storage' },
+        { label: '512 GB — A$1299', note: 'Comfortable for most users' },
+        { label: '1 TB — A$1599', note: 'Recommended for local projects and media' },
+        { label: '2 TB - 8 TB', note: 'For large local datasets or media libraries' }
+      ]
+    },
+    upgradeNote: 'RAM and storage are fixed at purchase. Stepping up to M4 Pro also upgrades Thunderbolt 4 to Thunderbolt 5.'
+  },
+  imac: {
+    id: 'imac',
+    name: 'iMac',
+    shortName: 'iMac',
+    tagline: 'All-in-one desktop with a built-in display',
+    price: 'A$1999',
+    shopUrl: 'https://www.apple.com/au/shop/buy-mac/imac',
+    color: '#ec4899',
+    colorBg: '#fdf2f8',
+    colorDark: '#f472b6',
+    icon: '🩷',
+    weights: { everyday: 1.5, creative: 1.2, development: 0.6, data: 0.6, ai: 0.3, power: 0.5, portability: -1.5, desktop: 2, multiDisplay: -0.5, budgetConscious: 0.8, largeScreen: 1 },
+    specs: { chip: 'Apple M4', cores: 'Up to 10-core CPU, 10-core GPU', memory: '16 / 24 / 32 GB', storage: '256 GB - 2 TB', battery: 'N/A - desktop', display: '24" 4.5K Retina (built-in)', ports: 'Up to 4x Thunderbolt 4, headphone', wireless: 'Wi-Fi 6E, Bluetooth 5.3' },
+    pros: ['All-in-one — display included', 'Vibrant 24" 4.5K screen', 'Colour-matched keyboard & mouse included', 'Clean, cable-light desk setup', 'Silent under everyday use'],
+    cons: ['Display not reusable or upgradable', 'M4 only — no Pro/Max option', 'Not portable', 'Limited to 32 GB RAM'],
+    useCases: ['Family & home office', 'Everyday productivity', 'Photo & light video editing', 'Web & content creation', 'Reception & shared workstations', 'Education'],
+    matrix: [
+      ['Device management & security', 'yes'], ['Office apps & email', 'yes'], ['Web browsing (10-15 tabs)', 'yes'],
+      ['Video calls (Teams/Zoom)', 'yes'], ['Photo editing', 'yes'], ['Graphic design', 'yes'],
+      ['Video editing', 'yes'], ['Xcode', 'yes'], ['VS Code', 'yes'],
+      ['Docker / containers', 'limited'], ['Local LLM / AI', 'no'], ['Heavy multitasking', 'limited'],
+      ['Virtual machines', 'limited'], ['External displays', 'yes']
+    ],
+    notes: 'The 24" iMac is an all-in-one desktop with a built-in 4.5K Retina display, so there is nothing extra to buy. It uses the standard M4 chip (no Pro/Max option), making it ideal for everyday productivity and creative work rather than the heaviest compute or AI workloads.',
+    upgradeOptions: {
+      cpu: [
+        { label: 'M4 8-core — A$1999', note: '8-core GPU, 2 Thunderbolt ports — everyday productivity' },
+        { label: 'M4 10-core — from A$2399', note: '10-core GPU, 4 Thunderbolt ports, Gigabit Ethernet option' }
+      ],
+      ram: [
+        { label: '16 GB (base)', note: 'Handles everyday tasks and light creative work' },
+        { label: '24 GB', note: 'Better for multitasking and photo/video editing' },
+        { label: '32 GB', note: 'Maximum — for heavier creative workloads' }
+      ],
+      storage: [
+        { label: '256 GB (base)', note: 'Fine with cloud storage' },
+        { label: '512 GB', note: 'Recommended for most users' },
+        { label: '1 TB - 2 TB', note: 'For local media and project libraries' }
+      ]
+    },
+    upgradeNote: 'The entry model has 2 Thunderbolt ports; the 10-core GPU config adds 4 ports and a Gigabit Ethernet option. RAM tops out at 32 GB.'
   }
 };
