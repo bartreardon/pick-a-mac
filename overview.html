@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compare all Macs</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* Banner mirrors CONFIG.bannerGradient / logoUrl in pick-a-mac.html */
+  .site-header { background: linear-gradient(135deg, #e8b830 0%, #4a0e7a 50%, #0a0018 100%); }
+
+  .overview-intro {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+  .overview-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--text-tertiary);
+    margin-bottom: 28px;
+  }
+  .overview-legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend-swatch { width: 22px; height: 12px; border-radius: 3px; display: inline-block; }
+  .legend-swatch.pos { background: var(--accent); }
+  .legend-swatch.neg { background: var(--text-tertiary); }
+
+  .device-overview { display: flex; flex-direction: column; gap: 24px; }
+
+  .device-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .device-card-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .device-card-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+  .device-card-title { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; }
+  .device-card-tagline { font-size: 13px; color: var(--text-secondary); }
+  .device-card-price { margin-left: auto; font-size: 15px; font-weight: 700; flex-shrink: 0; }
+  .device-card-body { padding: 16px 24px 22px; }
+
+  /* Diverging category bars: zero line in the middle, positive right, negative left */
+  .cat-row { display: flex; align-items: center; gap: 12px; padding: 3px 0; }
+  .cat-label {
+    width: 128px;
+    text-align: right;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+  }
+  .cat-track {
+    flex: 1;
+    height: 18px;
+    position: relative;
+    background: var(--surface-alt);
+    border-radius: 5px;
+  }
+  .cat-track::before {
+    content: '';
+    position: absolute;
+    left: 50%; top: 0; bottom: 0;
+    width: 1px;
+    background: var(--border);
+  }
+  .cat-bar {
+    position: absolute;
+    top: 2px; bottom: 2px;
+    border-radius: 3px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .cat-bar.pos { left: 50%; }
+  .cat-bar.neg { right: 50%; background: var(--text-tertiary); }
+  .cat-val { width: 34px; text-align: right; font-size: 12px; font-weight: 600; flex-shrink: 0; }
+  .cat-val.neg { color: var(--text-tertiary); }
+
+  @media (max-width: 600px) {
+    .cat-label { width: 92px; font-size: 11px; }
+    .device-card-header { padding: 16px; gap: 12px; }
+    .device-card-body { padding: 12px 16px 18px; }
+  }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="site-header-inner">
+    <img class="site-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Apple_logo_white.svg/1280px-Apple_logo_white.svg.png" alt="Apple">
+    <div class="site-header-divider"></div>
+    <div class="site-header-text">
+      <h1>Compare all Macs</h1>
+      <p>How each device is weighted across every category the quiz asks about.</p>
+    </div>
+    <a class="site-header-link" href="pick-a-mac.html">Find my Mac →</a>
+  </div>
+</header>
+<div class="page">
+  <p class="overview-intro">Every Mac is scored against the same set of categories. Longer bars mean the device is a stronger fit for that kind of work; muted bars pointing left mean it's a poorer fit (for example, a desktop scores negatively on portability).</p>
+  <div class="overview-legend">
+    <span><span class="legend-swatch pos"></span> Stronger fit</span>
+    <span><span class="legend-swatch neg"></span> Poorer fit</span>
+  </div>
+  <div id="overview" class="device-overview"></div>
+</div>
+
+<!-- Device models, specs, and pricing — edit devices.js to update -->
+<script src="devices.js"></script>
+<script>
+const CATEGORY_LABELS = {
+  everyday:        'Everyday tasks',
+  creative:        'Creative / media',
+  development:     'Development',
+  data:            'Data / analysis',
+  ai:              'Local AI / LLM',
+  power:           'Raw performance',
+  portability:     'Portability',
+  desktop:         'Desktop use',
+  multiDisplay:    'Multi-display',
+  budgetConscious: 'Budget-friendly',
+  largeScreen:     'Large screen'
+};
+
+const cats = Object.keys(CATEGORY_LABELS);
+const maxAbs = Math.max(
+  ...Object.values(devices).flatMap(d => cats.map(c => Math.abs(d.weights[c] || 0))),
+  1
+);
+
+document.getElementById('overview').innerHTML = Object.values(devices).map(d => {
+  const rows = cats.map(c => {
+    const v = d.weights[c] || 0;
+    const w = (Math.abs(v) / maxAbs) * 50;
+    const bar = v === 0 ? '' :
+      `<div class="cat-bar ${v > 0 ? 'pos' : 'neg'}" style="width:${w}%${v > 0 ? `;background:${d.color}` : ''}"></div>`;
+    return `<div class="cat-row">
+      <div class="cat-label">${CATEGORY_LABELS[c]}</div>
+      <div class="cat-track">${bar}</div>
+      <div class="cat-val${v < 0 ? ' neg' : ''}">${v}</div>
+    </div>`;
+  }).join('');
+
+  return `<div class="device-card">
+    <div class="device-card-header">
+      <div class="device-card-icon" style="background:${d.colorBg}">${d.icon}</div>
+      <div>
+        <div class="device-card-title">${d.name}</div>
+        <div class="device-card-tagline">${d.tagline}</div>
+      </div>
+      <div class="device-card-price" style="color:${d.color}">From ${d.price}</div>
+    </div>
+    <div class="device-card-body">${rows}</div>
+  </div>`;
+}).join('');
+</script>
+</body>
+</html>
