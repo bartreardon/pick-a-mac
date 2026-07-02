@@ -1,10 +1,15 @@
 # Mac Picker
 
-An interactive, single-file web quiz that helps users find the right Mac for their needs. Answer a series of questions about how you work and the quiz recommends the best device, with specs, pros/cons, upgrade options, and a runner-up suggestion.
+An interactive web quiz that helps users find the right Mac for their needs. Answer a series of questions about how you work and the quiz recommends the best device, with specs, pros/cons, upgrade options, and a runner-up suggestion.
 
 ## Usage
 
-Everything is self contained. Open `pick-a-mac.html` directly in any browser or host on any web server.
+No dependencies, frameworks, or build tools — just two files:
+
+- `pick-a-mac.html` — the quiz UI, questions, and scoring logic
+- `devices.js` — all device models, specs, and pricing
+
+Keep them in the same folder and open `pick-a-mac.html` directly in any browser or host on any web server.
 
 <img width="462" height="483" alt="image" src="https://github.com/user-attachments/assets/b1050564-8090-4588-9707-dc40c13cda28" />
 
@@ -117,7 +122,7 @@ Delete the entry from the `questions` array. No other changes are needed — the
 
 ## Customising devices
 
-Devices are defined in the `devices` object. Each key is the device's `id`. Sample device configs include MacBook Neo, MacBook Air, MacBook Pro and Mac Studio.
+Devices are defined in the `devices` object in `devices.js` — this is the single place to edit for a price update, a spec change, or adding/removing a system. Each key is the device's `id`. Sample device configs include MacBook Neo, MacBook Air, MacBook Pro and Mac Studio, with Australian MSRP pricing sourced from [everymac.com](https://everymac.com).
 
 A full device entry looks like this:
 
@@ -127,7 +132,7 @@ A full device entry looks like this:
   name:      'MacBook Air',
   shortName: 'Air',
   tagline:   'The best laptop for most people',
-  price:     '$1,099',
+  price:     'A$1799',
   shopUrl:   'https://www.apple.com/shop/buy-mac/macbook-air',
   color:     '#0071e3',
   colorBg:   '#e8f4fd',
@@ -193,7 +198,7 @@ A full device entry looks like this:
 | `useCases` | Yes | Array of recommended use-case tags |
 | `matrix` | Yes | Array of `[task, status]` pairs; status is `'yes'`, `'limited'`, or `'no'` |
 | `notes` | No | Freeform contextual notes shown on the results page |
-| `upgradeOptions` | No | Object of upgrade categories (`ram`, `storage`, `cpu`), each an array of options with `label` and `note` |
+| `upgradeOptions` | No | Object of upgrade categories (`display`, `cpu`, `ram`, `storage`), each an array of options with `label` and `note` |
 | `upgradeNote` | No | Freeform text shown below the upgrade options table |
 
 ### Adding a device
@@ -235,6 +240,6 @@ To introduce a new signal dimension, add it to the relevant answer options' `sig
 
 ## Technical notes
 
-- Single HTML file — no dependencies, frameworks, or build tools
+- Two files (`pick-a-mac.html` + `devices.js`) — no dependencies, frameworks, or build tools
 - Vanilla HTML, CSS, and JavaScript
 - Fully client-side; works offline once downloaded
